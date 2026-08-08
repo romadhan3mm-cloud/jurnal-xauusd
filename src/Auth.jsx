@@ -18,8 +18,7 @@ const AUTH_CSS = `
 .auth-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 .auth-switch { text-align: center; font-size: 12px; color: #7C828C; margin-top: 14px; }
 .auth-switch button { background: none; border: none; color: #C6A15B; cursor: pointer; font-size: 12px; padding: 0; margin-left: 4px; }
-.auth-watermark { text-align: center; margin-top: 18px; font-size: 10.5px; color: #4A5158; letter-spacing: 0.04em; }
-.auth-watermark span { color: #8A7240; }
+.auth-watermark { text-align: center; margin-bottom: 18px; font-size: 11px; color: #4A5158; letter-spacing: 0.04em; display: flex; align-items: center; justify-content: center; gap: 5px; }
 .auth-error { background: rgba(239,91,80,0.1); border: 1px solid rgba(239,91,80,0.3); color: #EF5B50; font-size: 12px; padding: 8px 10px; border-radius: 6px; margin-bottom: 12px; }
 .auth-info { background: rgba(63,195,126,0.1); border: 1px solid rgba(63,195,126,0.3); color: #3FC37E; font-size: 12px; padding: 8px 10px; border-radius: 6px; margin-bottom: 12px; }
 .auth-spin { animation: auth-spin-kf 1s linear infinite; }
@@ -65,7 +64,11 @@ export default function Auth() {
   return (
     <div className="auth-root">
       <style>{AUTH_CSS}</style>
-      <div className="auth-card">
+      <div style={{ width: "100%", maxWidth: 360, display: "flex", flexDirection: "column" }}>
+        <div className="auth-watermark">
+          <span style={{ fontSize: 13 }}>©</span> adunfx
+        </div>
+        <div className="auth-card">
         <h1 className="auth-title">
           Jurnal Trading <span style={{ color: "#C6A15B" }}>XAUUSD</span>
         </h1>
@@ -118,10 +121,7 @@ export default function Auth() {
             {mode === "login" ? "Daftar di sini" : "Masuk di sini"}
           </button>
         </div>
-      </div>
-
-      <div className="auth-watermark">
-        Jurnal Trading XAUUSD - adunfx
+        </div>
       </div>
     </div>
   );
