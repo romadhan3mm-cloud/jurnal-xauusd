@@ -14,20 +14,71 @@ export default function TradingViewChart({ theme = "dark" }) {
 
     const createWidget = () => {
       if (!window.TradingView || !containerRef.current) return;
+
+      const isLight = theme === "light";
+      const gridColor = "rgba(0,0,0,0)"; // grid disembunyikan (transparan)
+
       // eslint-disable-next-line no-new
       new window.TradingView.widget({
         autosize: true,
         symbol: "OANDA:XAUUSD",
         interval: "15",
         timezone: "Etc/UTC",
-        theme: theme === "light" ? "light" : "dark",
+        theme: isLight ? "light" : "dark",
         style: "1",
         locale: "id",
-        toolbar_bg: theme === "light" ? "#F6F4EF" : "#12161C",
+        toolbar_bg: isLight ? "#F6F4EF" : "#12161C",
         enable_publishing: false,
         allow_symbol_change: true,
-        hide_side_toolbar: false,
+
+        // === Toolbar & fitur lengkap, disamakan dengan tradingview.com ===
+        hide_top_toolbar: false,
+        hide_legend: false,
+        hide_side_toolbar: false, // toolbar tools gambar di kiri
         withdateranges: true,
+        details: true,
+        hotlist: true,
+        calendar: true,
+        watchlist: [],
+        studies: [],
+        show_popup_button: true,
+        popup_width: "1000",
+        popup_height: "650",
+        save_image: true,
+        support_host: "https://www.tradingview.com",
+
+        // === Warna candle & garis grid (disembunyikan) ===
+        overrides: {
+          // candle naik = hijau, candle turun = merah (standar TradingView)
+          "mainSeriesProperties.candleStyle.upColor": "#26A69A",
+          "mainSeriesProperties.candleStyle.downColor": "#EF5350",
+          "mainSeriesProperties.candleStyle.borderUpColor": "#26A69A",
+          "mainSeriesProperties.candleStyle.borderDownColor": "#EF5350",
+          "mainSeriesProperties.candleStyle.wickUpColor": "#26A69A",
+          "mainSeriesProperties.candleStyle.wickDownColor": "#EF5350",
+          "mainSeriesProperties.candleStyle.drawWick": true,
+          "mainSeriesProperties.candleStyle.drawBorder": true,
+
+          // hilangkan garis grid horizontal & vertikal
+          "paneProperties.vertGridProperties.color": gridColor,
+          "paneProperties.horzGridProperties.color": gridColor,
+          "paneProperties.background": isLight ? "#FFFFFF" : "#12161C",
+          "paneProperties.backgroundType": "solid",
+
+          // sumbu & crosshair mengikuti tema
+          "scalesProperties.textColor": isLight ? "#837C6E" : "#7C828C",
+          "scalesProperties.lineColor": isLight ? "#DDD7C9" : "#232A34",
+        },
+
+        disabled_features: [
+          "header_saveload", // simpan layout butuh akun TradingView, disembunyikan
+        ],
+        enabled_features: [
+          "study_templates",
+          "side_toolbar_in_fullscreen_mode",
+          "header_in_fullscreen_mode",
+        ],
+
         container_id: `tv-chart-${widgetId}`,
       });
     };
