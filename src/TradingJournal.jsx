@@ -68,6 +68,7 @@ const FONTS_CSS = `
   transition: color 0.15s, border-color 0.15s;
 }
 .tj-theme-toggle:hover { color: var(--gold); border-color: var(--gold-dim); }
+.tj-watermark { text-align: center; font-size: 10.5px; color: var(--muted); opacity: 0.55; letter-spacing: 0.04em; margin: 28px 0 4px; }
 
 .flex { display: flex; }
 .items-center { align-items: center; }
@@ -812,9 +813,9 @@ export default function TradingJournalApp({ userEmail, onLogout } = {}) {
                 ["Winrate", stats.winrate === null ? "—" : `${(stats.winrate * 100).toFixed(0)}%`, "var(--text)"],
                 ["RR", stats.rr === null ? "—" : `${stats.rr.toFixed(2)}x`, "var(--text)"],
               ].map(([label, val, color], i) => (
-                <div key={label} style={{ flex: "1 0 90px", padding: "10px 12px", borderRight: i < 5 ? "1px solid var(--border)" : "none" }}>
-                  <div style={{ fontSize: 9.5, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 3 }}>{label}</div>
-                  <div className="tj-mono" style={{ fontSize: 14, fontWeight: 600, color }}>{val}</div>
+                <div key={label} style={{ flex: "1 0 90px", padding: "10px 12px", borderRight: i < 5 ? "1px solid var(--border)" : "none", textAlign: "center" }}>
+                  <div style={{ fontSize: 9.5, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 3, textAlign: "center" }}>{label}</div>
+                  <div className="tj-mono" style={{ fontSize: 14, fontWeight: 600, color, textAlign: "center" }}>{val}</div>
                 </div>
               ))}
             </div>
@@ -856,7 +857,7 @@ export default function TradingJournalApp({ userEmail, onLogout } = {}) {
                 <thead>
                   <tr style={{ background: "var(--surface)" }}>
                     {["No", "Tanggal", "Sesi", "Start", "Target 3%", "Loss -4%", "Profit ($)", "Loss ($)", "WD ($)", "End Balance", ""].map((h) => (
-                      <th key={h} style={{ padding: "8px 10px", fontSize: 10.5, color: "var(--muted)", textAlign: "left", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.03em", borderBottom: "1px solid var(--border)" }}>
+                      <th key={h} style={{ padding: "8px 10px", fontSize: 10.5, color: "var(--muted)", textAlign: "center", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.03em", borderBottom: "1px solid var(--border)" }}>
                         {h}
                       </th>
                     ))}
@@ -875,7 +876,7 @@ export default function TradingJournalApp({ userEmail, onLogout } = {}) {
                       <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, color: "var(--muted)" }}>{fmtMoney(r.start)}</td>
                       <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, color: "var(--green)", opacity: 0.85 }}>{fmtMoney(r.target)}</td>
                       <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, color: "var(--red)", opacity: 0.85 }}>{fmtMoney(r.lossLimit)}</td>
-                      <td style={{ padding: "6px 8px", minWidth: 80 }}>
+                      <td style={{ padding: "6px 14px 6px 10px", minWidth: 88 }}>
                         <input
                           type="number"
                           className="tj-input tj-mono"
@@ -885,7 +886,7 @@ export default function TradingJournalApp({ userEmail, onLogout } = {}) {
                           style={{ color: "var(--green)" }}
                         />
                       </td>
-                      <td style={{ padding: "6px 8px", minWidth: 80 }}>
+                      <td style={{ padding: "6px 14px", minWidth: 88 }}>
                         <div style={{ position: "relative" }}>
                           <span style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", fontSize: 12, color: "var(--red)", opacity: 0.8, pointerEvents: "none" }}>
                             -$
@@ -900,7 +901,7 @@ export default function TradingJournalApp({ userEmail, onLogout } = {}) {
                           />
                         </div>
                       </td>
-                      <td style={{ padding: "6px 8px", minWidth: 70 }}>
+                      <td style={{ padding: "6px 10px 6px 14px", minWidth: 78 }}>
                         <input
                           type="number"
                           className="tj-input tj-mono"
@@ -945,10 +946,14 @@ export default function TradingJournalApp({ userEmail, onLogout } = {}) {
                       style={{
                         display: "flex",
                         alignItems: "center",
+                        justifyContent: "center",
                         gap: 6,
+                        flex: "1 1 0",
+                        minWidth: 110,
                         padding: "7px 12px",
                         borderRadius: 7,
                         fontSize: 12.5,
+                        textAlign: "center",
                         cursor: used ? "not-allowed" : "pointer",
                         border: `1px solid ${active ? "var(--gold)" : used ? "var(--border)" : "var(--border)"}`,
                         background: active ? "rgba(198,161,91,0.14)" : used ? "var(--surface-raised)" : "transparent",
@@ -1025,6 +1030,8 @@ export default function TradingJournalApp({ userEmail, onLogout } = {}) {
         )}
         </>
         )}
+
+        <div className="tj-watermark">Jurnal Trading XAUUSD - adunfx</div>
       </div>
     </div>
   );
