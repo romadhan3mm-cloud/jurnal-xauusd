@@ -100,6 +100,20 @@ function fmtMoney(n, opts = {}) {
   return `${sign}$${Math.abs(v).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
+function formatMoneyInputValue(raw, prefix) {
+  if (raw === "" || raw === null || raw === undefined) return "";
+  const cleaned = String(raw).replace(/[^0-9.]/g, "");
+  if (cleaned === "") return "";
+  return `${prefix}${cleaned}`;
+}
+
+function parseMoneyInputValue(text) {
+  const cleaned = text.replace(/[^0-9.]/g, "");
+  const firstDot = cleaned.indexOf(".");
+  if (firstDot === -1) return cleaned;
+  return cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g, "");
+}
+
 function fmtDate(iso) {
   const d = new Date(iso);
   return d.toLocaleDateString("id-ID", { day: "2-digit", month: "short", year: "numeric" });
@@ -892,37 +906,35 @@ export default function TradingJournalApp({ userEmail, onLogout } = {}) {
                       <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, color: "var(--red)", opacity: 0.85, textAlign: "center" }}>{fmtMoney(r.lossLimit)}</td>
                       <td style={{ padding: "8px 6px", textAlign: "center" }}>
                         <input
-                          type="number"
+                          type="text"
+                          inputMode="decimal"
                           className="tj-input tj-mono"
                           placeholder="0"
-                          value={r.profit}
-                          onChange={(e) => updateEntry(r.id, "profit", e.target.value)}
-                          style={{ color: "var(--green)", width: 64, textAlign: "center" }}
+                          value={formatMoneyInputValue(r.profit, "$")}
+                          onChange={(e) => updateEntry(r.id, "profit", parseMoneyInputValue(e.target.value))}
+                          style={{ color: "var(--green)", width: 72, textAlign: "center" }}
                         />
                       </td>
                       <td style={{ padding: "8px 6px", textAlign: "center" }}>
-                        <div style={{ position: "relative", display: "inline-block", width: 70 }}>
-                          <span style={{ position: "absolute", left: 7, top: "50%", transform: "translateY(-50%)", fontSize: 12, color: "var(--red)", opacity: 0.8, pointerEvents: "none" }}>
-                            -$
-                          </span>
-                          <input
-                            type="number"
-                            className="tj-input tj-mono"
-                            placeholder="0"
-                            value={r.loss}
-                            onChange={(e) => updateEntry(r.id, "loss", e.target.value)}
-                            style={{ color: "var(--red)", width: 70, paddingLeft: 18, textAlign: "center" }}
-                          />
-                        </div>
+                        <input
+                          type="text"
+                          inputMode="decimal"
+                          className="tj-input tj-mono"
+                          placeholder="0"
+                          value={formatMoneyInputValue(r.loss, "-$")}
+                          onChange={(e) => updateEntry(r.id, "loss", parseMoneyInputValue(e.target.value))}
+                          style={{ color: "var(--red)", width: 72, textAlign: "center" }}
+                        />
                       </td>
                       <td style={{ padding: "8px 6px", textAlign: "center" }}>
                         <input
-                          type="number"
+                          type="text"
+                          inputMode="decimal"
                           className="tj-input tj-mono"
                           placeholder="0"
-                          value={r.withdraw}
-                          onChange={(e) => updateEntry(r.id, "withdraw", e.target.value)}
-                          style={{ width: 56, textAlign: "center" }}
+                          value={formatMoneyInputValue(r.withdraw, "$")}
+                          onChange={(e) => updateEntry(r.id, "withdraw", parseMoneyInputValue(e.target.value))}
+                          style={{ width: 72, textAlign: "center" }}
                         />
                       </td>
                       <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, fontWeight: 600, textAlign: "center" }}>{fmtMoney(r.end)}</td>
@@ -1015,10 +1027,12 @@ export default function TradingJournalApp({ userEmail, onLogout } = {}) {
             <div style={{ marginTop: 16, border: "1px solid var(--border)", borderRadius: 10, overflow: "hidden" }}>
               <button
                 onClick={() => setShowCapitalRef((v) => !v)}
-                style={{ width: "100%", display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 14px", background: "var(--surface)", border: "none", color: "var(--muted)", fontSize: 12, cursor: "pointer" }}
+                style={{ width: "100%", position: "relative", display: "flex", justifyContent: "center", alignItems: "center", padding: "10px 14px", background: "var(--surface)", border: "none", color: "var(--muted)", fontSize: 12, cursor: "pointer" }}
               >
-                Capital Lot Reference
-                {showCapitalRef ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                <span>Capital Lot Reference</span>
+                <span style={{ position: "absolute", right: 14, top: "50%", transform: "translateY(-50%)", display: "inline-flex" }}>
+                  {showCapitalRef ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                </span>
               </button>
               {showCapitalRef && (
                 <table style={{ width: "100%", borderCollapse: "collapse" }}>
