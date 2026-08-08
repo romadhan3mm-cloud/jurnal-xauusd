@@ -68,7 +68,7 @@ const FONTS_CSS = `
   transition: color 0.15s, border-color 0.15s;
 }
 .tj-theme-toggle:hover { color: var(--gold); border-color: var(--gold-dim); }
-.tj-watermark { text-align: center; font-size: 10.5px; color: var(--muted); opacity: 0.6; letter-spacing: 0.04em; display: flex; align-items: center; justify-content: center; gap: 5px; margin-bottom: 14px; }
+.tj-watermark { text-align: left; font-size: 10.5px; color: var(--muted); opacity: 0.6; letter-spacing: 0.04em; display: flex; align-items: center; gap: 4px; margin: 4px 0 0; }
 .tj-user-wrap { position: relative; }
 .tj-user-dropdown { position: absolute; top: calc(100% + 8px); right: 0; z-index: 30; background: var(--surface-raised); border: 1px solid var(--border); border-radius: 9px; padding: 10px; min-width: 190px; box-shadow: 0 10px 24px rgba(0,0,0,0.35); }
 .tj-user-email { font-size: 11.5px; color: var(--text); word-break: break-all; padding: 4px 6px 10px; border-bottom: 1px solid var(--border); margin-bottom: 6px; }
@@ -453,15 +453,15 @@ export default function TradingJournalApp({ userEmail, onLogout } = {}) {
     <div className={`tj-root ${theme === "light" ? "tj-light" : ""}`}>
       <style>{FONTS_CSS}</style>
       <div style={{ maxWidth: 1180, margin: "0 auto", padding: "20px 28px 60px" }}>
-        <div className="tj-watermark">
-          <span style={{ fontSize: 13 }}>©</span> adunfx
-        </div>
         {/* Header */}
         <div className="flex items-start justify-between" style={{ marginBottom: 18 }}>
           <div>
             <h1 className="tj-display" style={{ fontSize: 21, fontWeight: 700, letterSpacing: "-0.01em", margin: 0 }}>
               Jurnal Trading <span style={{ color: "var(--gold)" }}>XAUUSD</span>
             </h1>
+            <div className="tj-watermark">
+              <span style={{ fontSize: 12 }}>©</span> adunfx
+            </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             {saving && <span style={{ fontSize: 10, color: "var(--muted)" }}>Menyimpan…</span>}
@@ -880,29 +880,29 @@ export default function TradingJournalApp({ userEmail, onLogout } = {}) {
                 <tbody>
                   {rows.map((r, i) => (
                     <tr key={r.id} style={{ borderBottom: i < rows.length - 1 ? "1px solid var(--border)" : "none" }}>
-                      <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, color: "var(--muted)" }}>{i + 1}</td>
-                      <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, whiteSpace: "nowrap" }}>{fmtDate(r.date)}</td>
+                      <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, color: "var(--muted)", textAlign: "center" }}>{i + 1}</td>
+                      <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, whiteSpace: "nowrap", textAlign: "center" }}>{fmtDate(r.date)}</td>
                       <td style={{ padding: "8px 10px", fontSize: 11, whiteSpace: "nowrap", textAlign: "center" }}>
                         <span style={{ display: "inline-block", width: 72, background: "rgba(198,161,91,0.12)", color: "var(--gold)", padding: "3px 0", borderRadius: 5, fontSize: 10.5, textAlign: "center" }}>
                           {sessionLabel(r.session)}
                         </span>
                       </td>
-                      <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, color: "var(--muted)" }}>{fmtMoney(r.start)}</td>
-                      <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, color: "var(--green)", opacity: 0.85 }}>{fmtMoney(r.target)}</td>
-                      <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, color: "var(--red)", opacity: 0.85 }}>{fmtMoney(r.lossLimit)}</td>
-                      <td style={{ padding: "6px 10px", minWidth: 64 }}>
+                      <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, color: "var(--muted)", textAlign: "center" }}>{fmtMoney(r.start)}</td>
+                      <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, color: "var(--green)", opacity: 0.85, textAlign: "center" }}>{fmtMoney(r.target)}</td>
+                      <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, color: "var(--red)", opacity: 0.85, textAlign: "center" }}>{fmtMoney(r.lossLimit)}</td>
+                      <td style={{ padding: "8px 6px", textAlign: "center" }}>
                         <input
                           type="number"
                           className="tj-input tj-mono"
                           placeholder="0"
                           value={r.profit}
                           onChange={(e) => updateEntry(r.id, "profit", e.target.value)}
-                          style={{ color: "var(--green)", textAlign: "center" }}
+                          style={{ color: "var(--green)", width: 64, textAlign: "center" }}
                         />
                       </td>
-                      <td style={{ padding: "6px 10px", minWidth: 68 }}>
-                        <div style={{ position: "relative" }}>
-                          <span style={{ position: "absolute", left: 8, top: "50%", transform: "translateY(-50%)", fontSize: 12, color: "var(--red)", opacity: 0.8, pointerEvents: "none" }}>
+                      <td style={{ padding: "8px 6px", textAlign: "center" }}>
+                        <div style={{ position: "relative", display: "inline-block", width: 70 }}>
+                          <span style={{ position: "absolute", left: 7, top: "50%", transform: "translateY(-50%)", fontSize: 12, color: "var(--red)", opacity: 0.8, pointerEvents: "none" }}>
                             -$
                           </span>
                           <input
@@ -911,23 +911,23 @@ export default function TradingJournalApp({ userEmail, onLogout } = {}) {
                             placeholder="0"
                             value={r.loss}
                             onChange={(e) => updateEntry(r.id, "loss", e.target.value)}
-                            style={{ color: "var(--red)", paddingLeft: 20, textAlign: "center" }}
+                            style={{ color: "var(--red)", width: 70, paddingLeft: 18, textAlign: "center" }}
                           />
                         </div>
                       </td>
-                      <td style={{ padding: "6px 10px", minWidth: 60 }}>
+                      <td style={{ padding: "8px 6px", textAlign: "center" }}>
                         <input
                           type="number"
                           className="tj-input tj-mono"
                           placeholder="0"
                           value={r.withdraw}
                           onChange={(e) => updateEntry(r.id, "withdraw", e.target.value)}
-                          style={{ textAlign: "center" }}
+                          style={{ width: 56, textAlign: "center" }}
                         />
                       </td>
                       <td className="tj-mono" style={{ padding: "8px 10px", fontSize: 12, fontWeight: 600, textAlign: "center" }}>{fmtMoney(r.end)}</td>
-                      <td style={{ padding: "8px 10px" }}>
-                        <button onClick={() => deleteEntry(r.id)} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer", display: "flex" }}>
+                      <td style={{ padding: "8px 10px", textAlign: "center" }}>
+                        <button onClick={() => deleteEntry(r.id)} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer", display: "inline-flex" }}>
                           <Trash2 size={13} />
                         </button>
                       </td>
@@ -1025,16 +1025,16 @@ export default function TradingJournalApp({ userEmail, onLogout } = {}) {
                   <thead>
                     <tr>
                       {["Capital ($)", "Lot Size", "Max Layers"].map((h) => (
-                        <th key={h} style={{ padding: "7px 12px", fontSize: 10.5, color: "var(--muted)", textAlign: "left", borderTop: "1px solid var(--border)" }}>{h}</th>
+                        <th key={h} style={{ padding: "7px 12px", fontSize: 10.5, color: "var(--muted)", textAlign: "center", borderTop: "1px solid var(--border)" }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {CAPITAL_LOT_REF.map((row) => (
                       <tr key={row.capital} className="tj-mono">
-                        <td style={{ padding: "7px 12px", fontSize: 12, borderTop: "1px solid var(--border)" }}>${row.capital}</td>
-                        <td style={{ padding: "7px 12px", fontSize: 12, borderTop: "1px solid var(--border)" }}>{row.lot}</td>
-                        <td style={{ padding: "7px 12px", fontSize: 12, borderTop: "1px solid var(--border)" }}>{row.layers}</td>
+                        <td style={{ padding: "7px 12px", fontSize: 12, borderTop: "1px solid var(--border)", textAlign: "center" }}>${row.capital}</td>
+                        <td style={{ padding: "7px 12px", fontSize: 12, borderTop: "1px solid var(--border)", textAlign: "center" }}>{row.lot}</td>
+                        <td style={{ padding: "7px 12px", fontSize: 12, borderTop: "1px solid var(--border)", textAlign: "center" }}>{row.layers}</td>
                       </tr>
                     ))}
                   </tbody>
