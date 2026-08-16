@@ -1,9 +1,0 @@
-[[redirects]]
-  from = "/.well-known/assetlinks.json"
-  to = "/well-known/assetlinks.json"
-  status = 200
-
-[[headers]]
-  for = "/well-known/assetlinks.json"
-  [headers.values]
-    Content-Type = "application/json"
